@@ -1,8 +1,8 @@
 require 'journey'
 
 describe Journey do
-    let(:entry_station) { double :station }
-    let(:exit_station) { double :station }
+    let(:entry_station) { double :station, zone: 1 }
+    let(:exit_station) { double :station, zone: 2 }
     let(:subject) { Journey.new }
 
     describe "#exit_station" do
