@@ -1,19 +1,15 @@
 require 'station'
 
 describe Station do
-  let(:name) { double :name }
-  let(:zone_number) { double :zone }
-  let(:subject) { Station.new(name, zone_number) }
+  let(:subject) { Station.new("Bethnal Green", 2) }
 
-  describe '#name' do
-    it 'returns the name' do
-        expect(subject.name).to eq name
-    end
+  it 'knows its name' do
+      expect(subject.name).to eq "Bethnal Green"
   end
 
   describe '#zone' do
     it 'returns the zone number' do
-        expect(subject.zone).to eq zone_number
+        expect(subject.zone).to eq 2
     end
   end
 end
