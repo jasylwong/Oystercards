@@ -43,8 +43,9 @@ describe Oystercard do
     end
 
     it "can touch in" do
-      subject.top_up(2)
+      subject.top_up(20)
       subject.touch_in(entry_station)
+      # p subject.journey.full_journey
       expect(subject).to be_in_journey
     end
 
