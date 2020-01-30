@@ -56,10 +56,6 @@ describe Oystercard do
   describe "#in_journey?" do
     it { is_expected.to respond_to(:in_journey?) }
 
-    it 'returns false at the start' do
-      expect(subject.in_journey?).to be false
-    end
-
     it 'returns true when the user has touched in' do
       subject.top_up(Oystercard::MINIMUM_FARE)
       subject.touch_in(entry_station)
@@ -67,6 +63,8 @@ describe Oystercard do
     end
 
     it 'returns false when the user has touched out' do
+      subject.top_up(Oystercard::MINIMUM_FARE)
+      subject.touch_in(entry_station)
       subject.touch_out(exit_station)
       expect(subject.in_journey?).to be false
     end
