@@ -68,36 +68,45 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
-    before(:each) do
-      subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(entry_station)
-    end
-    it { is_expected.to respond_to(:touch_out) }
+    context 'touched in' do
+      before(:each) do
+        subject.top_up(Oystercard::MINIMUM_FARE)
+        subject.touch_in(entry_station)
+      end
+      it { is_expected.to respond_to(:touch_out) }
 
-    it 'changes in_journey to false' do
-      expect { subject.touch_out(exit_station) }.to change{ subject.in_journey?}.to false
+      it 'changes in_journey to false' do
+        expect { subject.touch_out(exit_station) }.to change{ subject.in_journey?}.to false
+      end
+
+      it 'can touch out' do
+        subject.touch_out(exit_station)
+        expect(subject).to_not be_in_journey
+      end
+
+      it 'removes the entry station' do
+        subject.touch_out(exit_station)
+        expect(subject.entry_station).to be_nil
+      end
+
+      it 'adds a journey' do
+        subject.touch_out(exit_station)
+        # expect { subject.touch_out(exit_station) }.to change { subject.journey_log.journeys }
+        #   .by(journey)
+        expect(subject.journey_log.journeys).to eq( [journey] )
+        expect(subject.journey_log.journeys).to include(journey)
+      end
+
+      it 'deducts the actual fare' do
+        expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by -Journey::ACTUAL_FARE
+      end
     end
 
-    it 'can touch out' do
-      subject.touch_out(exit_station)
-      expect(subject).to_not be_in_journey
-    end
-
-    it 'deducts the minimum fare from the balance at touch out' do
-      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
-    end
-
-    it 'removes the entry station' do
-      subject.touch_out(exit_station)
-      expect(subject.entry_station).to be_nil
-    end
-
-    it 'adds a journey' do
-      subject.touch_out(exit_station)
-      # expect { subject.touch_out(exit_station) }.to change { subject.journey_log.journeys }
-      #   .by(journey)
-      expect(subject.journey_log.journeys).to eq( [journey] )
-      expect(subject.journey_log.journeys).to include(journey)
+    context 'no tapping in' do
+      it 'imposes the penalty fare' do
+        subject.top_up(Oystercard::MAXIMUM_BALANCE)
+        expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by -Journey::PENALTY_FARE
+      end
     end
   end
 

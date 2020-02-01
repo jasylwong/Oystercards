@@ -9,6 +9,9 @@ class JourneyLog
     end
     
     def start(entry_station)
+        if !@journey.nil?
+            @journeys.push({ :a => @journey.entry_station, :b => nil }) if !@journey.entry_station.nil? && @journey.exit_station.nil?
+        end
         @journey = Journey.new
         @journey.enter(entry_station)
     end

@@ -11,13 +11,13 @@ class Journey
 
     def enter(station)
         @entry_station = station
-        @full_journey = { :a => @entry_station, :b => nil? }
+        @full_journey = { :a => @entry_station, :b => nil }
     end
 
     def exit(station)
         @fare = ACTUAL_FARE if !full_journey[:a].nil?
         @exit_station = station
-        @full_journey = { :a => @entry_station, :b => @exit_station }
+        self.full_journey
         @exit_station
     end
     

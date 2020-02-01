@@ -12,6 +12,13 @@ describe JourneyLog do
             expect(subject.journey).to be_a(Journey)
             expect(subject.journey.full_journey[:a]).to eq "Liverpool Street"
         end
+
+        it "ensures previous journey added if didn't tap out" do
+            subject.start("Liverpool Street")
+            subject.start("Bank")
+            expect(subject.journeys).to eq [{ a: "Liverpool Street", b: nil }]
+        end
+
     end
 
     it 'initializes with a journey_class parameter' do
@@ -25,5 +32,5 @@ describe JourneyLog do
         end
     end 
 
-    
+
 end
