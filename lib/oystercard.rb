@@ -20,17 +20,17 @@ class Oystercard
     raise "Insufficient balance to touch in" if @balance < MINIMUM_FARE
     @journey = Journey.new
     @journey.enter(start)
-    # @journey_log.
+    @journey_log.start(start)
     @entry_station = start
   end
 
   def touch_out(finish)
+    # p @journey_log.journeys
     @journey = Journey.new unless @journey
     deduct(MINIMUM_FARE)
     @journey.exit(finish)
-    p @journey_log.journeys
-    @journey_log.journeys.push("what"); @entry_station = nil
-    p @journey_log.journeys
+    @journey_log.finish(finish); @entry_station = nil
+    # p @journey_log.journeys
   end
 
   def in_journey?

@@ -16,6 +16,7 @@ class JourneyLog
     def finish(exit_station)
         self.current_journey
         @journey.exit(exit_station)
+        @journeys.push({ :a => @journey.entry_station, :b => @journey.exit_station })
     end
 
     private

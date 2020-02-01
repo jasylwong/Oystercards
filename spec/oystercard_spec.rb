@@ -93,8 +93,10 @@ describe Oystercard do
     end
 
     it 'adds a journey' do
-      expect { subject.touch_out(exit_station) }.to change { subject.journey_log.journeys }
-        .by([journey])
+      subject.touch_out(exit_station)
+      # expect { subject.touch_out(exit_station) }.to change { subject.journey_log.journeys }
+      #   .by(journey)
+      expect(subject.journey_log.journeys).to eq( [journey] )
       expect(subject.journey_log.journeys).to include(journey)
     end
   end
