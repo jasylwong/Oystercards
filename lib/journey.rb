@@ -2,10 +2,9 @@ class Journey
     attr_reader :entry_station, :exit_station, :full_journey, :fare
     
     PENALTY_FARE = 6
-    ACTUAL_FARE = 3
+    BASIC_FARE = 1
 
     def initialize
-        @entry_station = entry_station
         @fare = PENALTY_FARE
     end
 
@@ -15,10 +14,11 @@ class Journey
     end
 
     def exit(station)
-        @fare = ACTUAL_FARE if !full_journey[:a].nil?
         @exit_station = station
         self.full_journey
+        @fare = fare_calculator if !@entry_station.nil?
         @exit_station
+        
     end
     
     def full_journey
@@ -26,6 +26,12 @@ class Journey
     end
 
     def in_journey?
-        !full_journey[:a].nil? && full_journey[:b].nil?
+        !@entry_station.nil? && @exit_station.nil?
+    end
+
+    private
+
+    def fare_calculator
+        (@entry_station.zone - @exit_station.zone).abs + BASIC_FARE if @entry_station && @exit_station
     end
 end

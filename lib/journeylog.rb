@@ -22,9 +22,13 @@ class JourneyLog
         @journeys.push({ :a => @journey.entry_station, :b => @journey.exit_station })
     end
 
+    def journeys
+        @journeys.dup
+    end
+
     private
 
     def current_journey
-        @journey = @journey ? @journey : Journey.new
+        @journey ||= Journey.new
     end
 end

@@ -1,6 +1,6 @@
 describe Oystercard do
-  let(:entry_station) { double :station }
-  let(:exit_station) { double :station }
+  let(:entry_station) { double :station, zone: 1 }
+  let(:exit_station) { double :station, zone: 3}
   let(:journey){ {a: entry_station, b: exit_station} }
 
   describe '#initialize' do
@@ -98,11 +98,12 @@ describe Oystercard do
       end
 
       it 'deducts the actual fare' do
-        expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by -Journey::ACTUAL_FARE
+        expect { subject.touch_out(exit_station) }.to change{ subject.balance }
+          .by -(entry_station.zone - exit_station.zone).abs - Journey::BASIC_FARE
       end
     end
 
-    context 'no tapping in' do
+    context 'no touching in' do
       it 'imposes the penalty fare' do
         subject.top_up(Oystercard::MAXIMUM_BALANCE)
         expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by -Journey::PENALTY_FARE

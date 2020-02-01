@@ -8,9 +8,10 @@ describe JourneyLog do
         end
 
         it 'starts a new journey with an entry station' do
-            subject.start("Liverpool Street")
+            station_1 = Station.new("Liverpool Street", 1)
+            subject.start(station_1)
             expect(subject.journey).to be_a(Journey)
-            expect(subject.journey.full_journey[:a]).to eq "Liverpool Street"
+            expect(subject.journey.full_journey[:a]).to eq station_1
         end
 
         it "ensures previous journey added if didn't tap out" do
