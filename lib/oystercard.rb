@@ -1,12 +1,14 @@
+require './lib/journeylog.rb'
+
 class Oystercard
-  attr_reader :balance, :entry_station, :in_journey, :finish_station, :journeys, :journey
+  attr_reader :balance, :entry_station, :in_journey, :finish_station, :journey_log, :journey
 
   MAXIMUM_BALANCE = 90  
   MINIMUM_FARE = 1
 
   def initialize
     @balance = 0
-    @journeys = []
+    @journey_log = JourneyLog.new
   end
 
   def top_up(amount)
@@ -17,13 +19,18 @@ class Oystercard
   def touch_in(start)
     raise "Insufficient balance to touch in" if @balance < MINIMUM_FARE
     @journey = Journey.new
-    @journey.enter(start); @entry_station = start
+    @journey.enter(start)
+    # @journey_log.
+    @entry_station = start
   end
 
   def touch_out(finish)
+    @journey = Journey.new unless @journey
     deduct(MINIMUM_FARE)
     @journey.exit(finish)
-    @journeys += [@journey.full_journey]; @entry_station = nil
+    p @journey_log.journeys
+    @journey_log.journeys.push("what"); @entry_station = nil
+    p @journey_log.journeys
   end
 
   def in_journey?

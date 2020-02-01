@@ -7,9 +7,6 @@ describe Oystercard do
     it 'defaults balance to 0' do
       expect(subject.balance).to eq 0
     end
-    it '#journeys to nil' do
-      expect(subject.journeys).to be_empty
-    end
   end
 
   describe '#top_up' do 
@@ -45,7 +42,6 @@ describe Oystercard do
     it "can touch in" do
       subject.top_up(20)
       subject.touch_in(entry_station)
-      # p subject.journey.full_journey
       expect(subject).to be_in_journey
     end
 
@@ -74,7 +70,7 @@ describe Oystercard do
   describe "#touch_out" do
     before(:each) do
       subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(exit_station)
+      subject.touch_in(entry_station)
     end
     it { is_expected.to respond_to(:touch_out) }
 
@@ -97,10 +93,9 @@ describe Oystercard do
     end
 
     it 'adds a journey' do
-      subject.touch_in(entry_station)
-      expect { subject.touch_out(exit_station) }.to change { subject.journeys }
+      expect { subject.touch_out(exit_station) }.to change { subject.journey_log.journeys }
         .by([journey])
-      expect(subject.journeys).to include(journey)
+      expect(subject.journey_log.journeys).to include(journey)
     end
   end
 
@@ -112,9 +107,9 @@ describe Oystercard do
     end
   end
 
-  describe '#journeys' do
-    it 'returns journey list array' do
-      expect(subject.journeys).to be_an(Array)
+  describe '#journey_log' do
+    it 'returns journey_log list array' do
+      expect(subject.journey_log.journeys).to be_an(Array)
     end
   end
 end 
